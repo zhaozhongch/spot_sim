@@ -1,0 +1,26 @@
+<launch>
+    <arg name="robot_name" default="/spot1" />
+    <arg name="twist_publisher_name" default="cmd_vel" />
+    <arg name="pose_publisher_name" default="body_pose" />
+    <!-- original speed 0.5 when Tswing = 0.17. I reset Tswing to 0.1 and default speed to 1.2 -->
+    <arg name="speed" default="1.2" />
+    <arg name="turn" default="1.0" />
+    <arg name="pose_speed" default="0.01" />
+    <arg name="pose_turn" default="0.1" />
+    <arg name="repeat_rate" default="0.0" />
+    <arg name="key_timeout" default="0.0" />
+    <arg name="msg_max" default="14.0" />
+
+    <param name="robot_name" value="$(arg robot_name)" />
+    <param name="twist_publisher_name" value="$(arg twist_publisher_name)" />
+    <param name="pose_publisher_name" value="$(arg pose_publisher_name)" />
+    <param name="speed" value="$(arg speed)" />
+    <param name="turn" value="$(arg turn)" />
+    <param name="pose_speed" value="$(arg pose_speed)" />
+    <param name="pose_turn" value="$(arg pose_turn)" />
+    <param name="repeat_rate" value="$(arg repeat_rate)" />
+    <param name="key_timeout" value="$(arg key_timeout)" />
+    <param name="msg_max" value="$(arg msg_max)" />
+
+    <node name="teleop_legged_robots" pkg="teleop_legged_robots" type="teleop_legged_robots.py" ns="$(arg robot_name)" output="screen"/>
+</launch>

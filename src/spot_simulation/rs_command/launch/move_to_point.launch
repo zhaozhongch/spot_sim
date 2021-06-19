@@ -1,0 +1,41 @@
+<launch>
+    <arg name="robot_name" default="spot1" />
+    <arg name="twist_publisher_name" default="cmd_vel" />
+    <arg name="pose_publisher_name" default="body_pose" />
+    <!-- original speed 0.5 when Tswing = 0.17. I reset Tswing to 0.1 and default speed to 1.2 -->
+    <arg name="speed" default="1.2" />
+    <arg name="turn" default="1.0" />
+    <arg name="pose_speed" default="0.01" />
+    <arg name="pose_turn" default="0.1" />
+    <arg name="repeat_rate" default="0.0" />
+    <arg name="key_timeout" default="0.0" />
+    <arg name="msg_max" default="14.0" />
+
+    <arg name="goal_x" default="3.0" />
+    <arg name="goal_y" default="14.0" />
+    <arg name="goal_marker_name" default="marker" />
+
+    <param name="robot_name" value="$(arg robot_name)" />
+    <param name="twist_publisher_name" value="$(arg twist_publisher_name)" />
+    <param name="pose_publisher_name" value="$(arg pose_publisher_name)" />
+    <param name="speed" value="$(arg speed)" />
+    <param name="turn" value="$(arg turn)" />
+    <param name="pose_speed" value="$(arg pose_speed)" />
+    <param name="pose_turn" value="$(arg pose_turn)" />
+    <param name="repeat_rate" value="$(arg repeat_rate)" />
+    <param name="key_timeout" value="$(arg key_timeout)" />
+    <param name="msg_max" value="$(arg msg_max)" />
+    <param name="goal_x" value="$(arg goal_x)" />
+    <param name="goal_y" value="$(arg goal_y)" />
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find rs_command)/urdf/$(arg goal_marker_name).urdf.xacro'"/>
+
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_$(arg goal_marker_name)" 
+        args="-x $(arg goal_x) -y $(arg goal_y) -Y 0
+        -unpause -urdf -param robot_description -model $(arg goal_marker_name)" respawn="false">
+    </node>
+
+    <node name="to_the_goal" pkg="rs_command" type="move_to_point.py" ns="$(arg robot_name)" output="screen"/>
+
+    <!-- <node pkg="rosservice" type="rosservice" name="delete_marker" args="call gazebo/delete_model '{model_name: $(arg goal_marker_name)}'" /> -->
+</launch>

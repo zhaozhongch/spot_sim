@@ -1,0 +1,6 @@
+<launch>
+    <arg name="goal_x" default="0.0" />
+    <arg name="goal_y" default="18.0" />
+
+    <node name="planner" pkg="rs_command" type="A_star.py" output="screen"/>
+</launch>

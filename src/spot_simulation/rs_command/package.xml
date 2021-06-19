@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>rs_command</name>
+  <version>1.0.0</version>
+  <description>Send velocity command to the robot</description>
+
+  <maintainer email="zhch5450@colorado.edu">Zhaozhong</maintainer>
+
+  <license>BSD</license>
+
+  <!-- <url type="website">http://wiki.ros.org/teleop_legged_robots</url> -->
+
+  <author>Zhaozhong Chen</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>gazebo_msgs</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>message_generation</run_depend>
+</package>

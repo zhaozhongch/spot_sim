@@ -1,0 +1,76 @@
+<launch>
+    <arg name="robot_name" default="spot1" />
+    <arg name="twist_publisher_name" default="cmd_vel" />
+    <arg name="pose_publisher_name" default="body_pose" />
+    <!-- original speed 0.5 when Tswing = 0.17. I reset Tswing to 0.1 and default speed to 1.2 -->
+    <arg name="speed" default="1.2" />
+    <arg name="turn" default="1.0" />
+    <arg name="pose_speed" default="0.01" />
+    <arg name="pose_turn" default="0.1" />
+    <arg name="repeat_rate" default="0.0" />
+    <arg name="key_timeout" default="0.0" />
+    <arg name="msg_max" default="14.0" />
+
+    <arg name="start_x" default="3.0" />
+    <arg name="start_y" default="2.0" />
+    <arg name="goal_x" default="-4.0" />
+    <arg name="goal_y" default="-5.0" />
+    <arg name="goal_marker_name" default="marker" />
+
+    <param name="robot_name" value="$(arg robot_name)" />
+    <param name="twist_publisher_name" value="$(arg twist_publisher_name)" />
+    <param name="pose_publisher_name" value="$(arg pose_publisher_name)" />
+    <param name="speed" value="$(arg speed)" />
+    <param name="turn" value="$(arg turn)" />
+    <param name="pose_speed" value="$(arg pose_speed)" />
+    <param name="pose_turn" value="$(arg pose_turn)" />
+    <param name="repeat_rate" value="$(arg repeat_rate)" />
+    <param name="key_timeout" value="$(arg key_timeout)" />
+    <param name="msg_max" value="$(arg msg_max)" />
+    <param name="start_x" value="$(arg start_x)" />
+    <param name="start_y" value="$(arg start_y)" />
+    <param name="goal_x" value="$(arg goal_x)" />
+    <param name="goal_y" value="$(arg goal_y)" />
+    <param name="goal_marker_name" value="$(arg goal_marker_name)" />
+
+    <!-- generate robots -->
+    <include file="$(find rs_description)/launch/description.launch" />
+    <arg name="init_pose" default="-x $(arg start_x) -y $(arg start_y) -z 0.72 -R 0.0 -P 0.0 -Y 0.0"/>
+    <group ns="$(arg robot_name)">
+        <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+              args="$(arg init_pose) -urdf -param /robot_description -model $(arg robot_name)"
+              respawn="false" output="screen"/>
+        <include file="$(find rs_control)/launch/spot_controller.launch">
+            <arg name="spot_name" value="$(arg robot_name)"/>
+        </include>
+    </group>
+
+    <!-- inverse keinematics -->
+    <node name="inverse_spot" pkg="rs_inverse" type="env_tester.py" output="screen" ns="/$(arg robot_name)"/>
+
+    <!-- velocity controller -->
+    <!--  Topic with velocity command (Twist msg)  -->
+    <arg name="twist_topic_name" default="spot1/cmd_vel"/>
+    <!--  Topic with body position command (Twist msg)  -->
+    <arg name="pose_topic_name" default="spot1/body_pose"/>
+    <!--  Topic with gait command   -->
+    <arg name="gait_topic_name" default="spot1/inverse_gait_input"/>
+    <!-- Time during which no velocity command is received. To stop a robot movement   -->
+    <arg name="time_stop" default="1"/>
+
+    <!-- Load the controllers -->
+    <node name="quadruped_controller_node" pkg="rs_base" type="quadruped_controller_node.py" respawn="false" output="screen">
+        <param name="twist_topic_name" value="$(arg twist_topic_name)"/>
+        <param name="pose_topic_name" value="$(arg pose_topic_name)"/>
+        <param name="gait_topic_name" value="$(arg gait_topic_name)"/>
+        <param name="time_stop" value="$(arg time_stop)"/>
+    </node>
+
+    <!-- path planner -->
+    <node name="planner" pkg="rs_command" type="A_star.py" output="screen"/>
+
+    <!--path follower -->
+    <node name="to_the_goal" pkg="rs_command" type="follow_way_points.py" ns="$(arg robot_name)" output="screen"/>
+
+    <!-- <node pkg="rosservice" type="rosservice" name="delete_marker" args="call gazebo/delete_model '{model_name: $(arg goal_marker_name)}'" /> -->
+</launch>

@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<sdf version='1.5'>
+    <model name="403_table">
+        <pose>0 0 0 0 0 0</pose>
+        <static>false</static>
+        <link name='model_body'>
+            <visual name="visual">
+                <geometry>
+                    <mesh>
+                        <uri>model://rs_gazebo/meshes/ss_hq4/403_table/403_table_visual.dae</uri>
+                        <scale>1 1 1</scale>
+                    </mesh>
+                </geometry>
+                <!-- <material>
+                    <ambient>0.46 1.0 0.46 1.0</ambient>
+                    <diffuse>0.46 1.0 0.46 1.0</diffuse>
+                    <specular>0.46 1.0 0.46 1.0</specular>
+                    <emissive>0.46 1.0 0.46 1.0</emissive>
+                </material> -->
+                <material>
+                    <script>Gazebo/Orange</script>
+                </material>
+            </visual>
+
+            <collision name="collision">
+                <geometry>
+                    <mesh>
+                        <uri>model://rs_gazebo/meshes/ss_hq4/403_table/403_table_collision.stl</uri>
+                        <scale>1 1 1</scale>
+                    </mesh>
+                </geometry>
+            </collision>
+
+            <inertial>
+                <pose> 0 0 0 0 0 0</pose>
+                <inertia>
+                    <ixx>0.499083333333</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>1.49908333333</iyy>
+                    <iyz>0</iyz>
+                    <izz>1.81666666667</izz>
+                </inertia>
+                <mass>10.0</mass>
+            </inertial>
+        </link>
+        <!-- <plugin name="show_model_info" filename="libshow_model_info.so"/> -->
+    </model>
+</sdf>
