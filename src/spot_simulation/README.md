@@ -2,7 +2,7 @@ Original repo is from https://github.com/SoftServeSAG/spot_simulation/tree/spot_
 After you run 
 ```
 roslaunch rs_gazebo HQ.launch
-roslaunch rs_gazebo robot.launch
+#this launch file will spawn the robot, launch inverse kinematics, launch controller, launch path planner, launch path follower
 roslaunch rs_command path_plan_and_follow.launch
 ```
 The last launch file define a start and end point and will find a path for the spot. Spot will follow that path
