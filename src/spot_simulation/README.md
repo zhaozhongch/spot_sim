@@ -1,4 +1,4 @@
-Original repo is from https://github.com/SoftServeSAG/spot_simulation/tree/spot_control. I add a path planning and control algorithm in the `rs_command` package. Put the gazebo plugin in the ros workspace before running 
+Original repo is from https://github.com/SoftServeSAG/spot_simulation/tree/spot_control. I add a path planning and control algorithm in the `rs_command` package. Put the gazebo plugin in the ros workspace before running `https://github.com/zhaozhongch/gazebo_plugin/tree/master/request_info`
 After you run 
 ```
 roslaunch rs_gazebo HQ.launch
